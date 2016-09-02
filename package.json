@@ -1,0 +1,27 @@
+{
+  "name": "vue-headroom",
+  "version": "0.0.0",
+  "description": "Headroom component for Vuejs",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./src/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dalphyx/vue-headroom.git"
+  },
+  "author": "dalphyx <wjcbmk@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "raf": "^3.3.0"
+  },
+  "bugs": {
+    "url": "https://github.com/dalphyx/vue-headroom/issues"
+  },
+  "homepage": "https://github.com/dalphyx/vue-headroom#readme",
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-dalphyx": "^0.1.0"
+  }
+}
