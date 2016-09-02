@@ -1,7 +1,7 @@
 import raf from 'raf'
 import checkActions from './checkActions'
 
-export const headroom = {
+const headroom = {
   template: `
     <div class="headroom-wrapper" :style="wrapperStyles">
       <div class="headroom" :style="innerStyle">
@@ -159,3 +159,5 @@ export const headroom = {
   }
 
 }
+
+export { headroom }
