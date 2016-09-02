@@ -1,6 +1,6 @@
 {
   "name": "vue-headroom",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Headroom component for Vuejs",
   "main": "./src/index.js",
   "scripts": {
