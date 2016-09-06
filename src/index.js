@@ -160,4 +160,4 @@ const headroom = {
 
 }
 
-export { headroom }
+export default headroom
