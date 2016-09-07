@@ -24,7 +24,7 @@ $ npm install vue-headroom
 </template>
 
 <script>
-import { headroom } from 'vue-headroom'
+import headroom from 'vue-headroom'
 
 export default {
   components: {
