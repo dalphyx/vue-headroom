@@ -3,6 +3,7 @@ const babel = require('rollup-plugin-babel')
 const vue = require('rollup-plugin-vue')
 const commonjs = require('rollup-plugin-commonjs')
 const nodeResolve = require('rollup-plugin-node-resolve')
+const uglify = require('rollup-plugin-uglify')
 
 rollup.rollup({
   entry: 'src/index.js',
@@ -27,7 +28,8 @@ rollup.rollup({
         ],
         'stage-2'
       ]
-    })
+    }),
+    uglify()
   ]
 }).then(bundle => {
   bundle.write({
@@ -36,6 +38,6 @@ rollup.rollup({
     globals: {
       raf: 'raf'
     },
-    dest: './dist/vue-headroom.js'
+    dest: './dist/vue-headroom.min.js'
   })
 })

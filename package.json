@@ -2,7 +2,7 @@
   "name": "vue-headroom",
   "version": "0.2.0",
   "description": "Headroom component for Vuejs",
-  "main": "./dist/vue-headroom.js",
+  "main": "./dist/vue-headroom.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src/*.js",
@@ -31,6 +31,7 @@
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^4.1.0",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1",
     "rollup-plugin-vue": "^2.2.20"
   }
 }
