@@ -155,9 +155,9 @@ function checkActions(states) {
   return action;
 }
 
-var headroom = {
-  template: '\n    <div class="headroom-wrapper" :style="wrapperStyles">\n      <div class="headroom" :style="innerStyle">\n        <slot></slot>\n      </div>\n    </div>\n  ',
-
+var headroom = { render: function render() {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "headroom-wrapper", style: _vm.wrapperStyles }, [_c('div', { staticClass: "headroom", style: _vm.innerStyle }, [_vm._t("default")], 2)]);
+  }, staticRenderFns: [],
   data: function data() {
     return {
       currentScrollY: 0,
