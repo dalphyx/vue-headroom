@@ -2,7 +2,7 @@ function checkActions (states) {
   const direction = states.currentScrollY >= states.lastScrollY ? 'down' : 'up'
   const distanceScrolled = Math.abs(states.currentScrollY - states.lastScrollY)
 
-  let action
+  var action
 
   // Begining, at the top and not fixed.
   if (
