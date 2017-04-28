@@ -85,7 +85,7 @@ export default {
         'left': '0',
         'right': '0',
         'z-index': this.isInTop ? this.zIndex : 1,
-        'transform': `translateY(${this.translate})`,
+        'transform': `translate3d(0, ${this.translate}, 0)`,
         'transition': this.isInTop ? `all ${this.speed}ms ${this.easing}` : null
       }
     },
