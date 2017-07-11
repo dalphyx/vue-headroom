@@ -160,6 +160,7 @@ export default {
 
     unfix () {
       this.$emit('unfix')
+      this.translate = 0
       this.state = 'unfixed'
     }
   }
