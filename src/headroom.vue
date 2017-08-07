@@ -82,6 +82,10 @@ export default {
     }
   },
 
+  beforeDestroy () {
+    window.removeEventListener('scroll', this._handleScroll)
+  },
+
   computed: {
     innerStyle () {
       return {
