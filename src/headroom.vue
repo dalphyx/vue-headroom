@@ -12,6 +12,8 @@ import checkActions from './checkActions'
 import support3d from './support3d'
 
 export default {
+  name: 'vueHeadroom',
+
   data () {
     return {
       currentScrollY: 0,

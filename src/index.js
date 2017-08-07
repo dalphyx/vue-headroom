@@ -5,7 +5,7 @@ const install = function (Vue, opt = {}) {
     return
   }
 
-  Vue.component('vue-headroom', headroom)
+  Vue.component(headroom.name, headroom)
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
