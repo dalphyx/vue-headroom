@@ -9,6 +9,9 @@
 <script>
 import raf from 'raf'
 import checkActions from './checkActions'
+import support3d from './support3d'
+
+const isSupport3d = support3d()
 
 export default {
   data () {
@@ -85,7 +88,9 @@ export default {
         'left': '0',
         'right': '0',
         'z-index': this.isInTop ? this.zIndex : 1,
-        'transform': `translate3d(0, ${this.translate}, 0)`,
+        'transform': isSupport3d
+          ? `translate3d(0, ${this.translate}, 0)`
+          : `translateY(${this.translate})`,
         'transition': this.isInTop ? `all ${this.speed}ms ${this.easing}` : null
       }
     },
@@ -136,7 +141,7 @@ export default {
 
     pin () {
       this.$emit('fix')
-    
+
       if (this.onPin) {
         this.onPin()
       }
@@ -148,7 +153,7 @@ export default {
 
     unpin () {
       this.$emit('fix')
-    
+
       if (this.onUnpin) {
         this.onUnpin()
       }
