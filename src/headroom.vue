@@ -69,6 +69,8 @@ export default {
       if (newVal) {
         this.unfix()
         window.removeEventListener('scroll', this._handleScroll)
+      } else {
+        window.addEventListener('scroll', this._handleScroll)
       }
     }
   },
