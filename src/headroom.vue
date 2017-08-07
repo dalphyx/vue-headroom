@@ -135,6 +135,8 @@ export default {
     },
 
     pin () {
+      this.$emit('fix')
+    
       if (this.onPin) {
         this.onPin()
       }
@@ -145,6 +147,8 @@ export default {
     },
 
     unpin () {
+      this.$emit('fix')
+    
       if (this.onUnpin) {
         this.onUnpin()
       }
@@ -155,6 +159,8 @@ export default {
     },
 
     unfix () {
+      this.$emit('unfix')
+      this.translate = 0
       this.state = 'unfixed'
     }
   }
