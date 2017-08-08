@@ -17,14 +17,19 @@ $ npm install vue-headroom
 ``` html
 <template>
   <headroom>
-    <div>
-      // Put your head code here...
-    </div>
+    <header>
+      Put your head code here...
+    </header>
   </headroom>
 </template>
 
 <script>
 import headroom from 'vue-headroom'
+
+Vue.use(headroom)
+
+// or
+import { headroom } from 'vue-headroom'
 
 export default {
   components: {
