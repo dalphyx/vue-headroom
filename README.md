@@ -5,7 +5,6 @@
 # Requirements
 
 - [Vue.js](https://github.com/vuejs/vue) `^2.0.0`
-- [webpack](https://github.com/webpack/webpack) `^2.0.0`
 
 # Installation
 
