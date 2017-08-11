@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src/*.js",
-    "build": "node build.js"
+    "build": "node build.js",
+    "gh-pages": "gh-pages -d docs -m 'Deployed to Github Pages'"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "babel-preset-stage-2": "^6.13.0",
     "eslint": "^4.4.0",
     "eslint-config-dalphyx": "^0.2.0",
+    "gh-pages": "^1.0.0",
     "rollup": "^0.45.2",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^8.1.0",

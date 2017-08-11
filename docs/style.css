@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.page-container {
+  margin-bottom: 100px;
+}
+
+.wrapper {
+  width: 750px;
+  margin: 0 auto;
+}
+
+header {
+  height: 70px;
+  background-color: #00a699;
+  color: #fff;
+  line-height: 70px;
+  font-size: 30px;
+}
+
+p {
+  margin: 25px 0;
+}
+
+a {
+  color: #00a699;
+}
+
+pre {
+  padding: 1em;
+  background-color: #f1f1f1;
+}
+
+code {
+  padding: 4px 6px;
+  background-color: #f1f1f1;
+  border-radius: 3px;
+}
+
+h1 {
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
