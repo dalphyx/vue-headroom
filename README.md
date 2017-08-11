@@ -12,6 +12,10 @@
 $ npm install vue-headroom
 ```
 
+# Docs & Demo
+
+[https://dalphyx.github.io/vue-headroom/](https://dalphyx.github.io/vue-headroom/)
+
 # Usage
 ``` html
 <template>
