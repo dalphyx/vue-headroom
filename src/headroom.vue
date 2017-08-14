@@ -109,6 +109,61 @@ export default {
   },
 
   methods: {
+    _getViewportHeight: () => {
+      window.innerHeight
+        || document.documentElement.clientHeight
+        || document.body.clientHeight
+    },
+
+    _getElementPhysicalHeight: elm => Math.max(
+      elm.offsetHeight,
+      elm.clientHeight
+    ),
+
+    _getDocumentHeight: () => {
+      const body = document.body
+      const documentElement = document.documentElement
+
+      return Math.max(
+        body.scrollHeight, documentElement.scrollHeight,
+        body.offsetHeight, documentElement.offsetHeight,
+        body.clientHeight, documentElement.clientHeight
+      )
+    },
+
+    _getElementHeight: elm => Math.max(
+      elm.scrollHeight,
+      elm.offsetHeight,
+      elm.clientHeight
+    ),
+
+    _getScrollerPhysicalHeight () {
+      const parent = this.scroller()
+
+      return (parent === window || parent === document.body)
+        ? this._getViewportHeight()
+        : this._getElementPhysicalHeight(parent)
+    },
+
+    _getScrollerHeight () {
+      const parent = this.scroller()
+
+      return (parent === window || parent === document.body)
+        ? this._getDocumentHeight()
+        : this._getElementHeight(parent)
+    },
+
+    _isOutOfBound (currentScrollY) {
+      const pastTop = currentScrollY < 0
+
+      const scrollerPhysicalHeight = this._getScrollerPhysicalHeight()
+      const scrollerHeight = this._getScrollerHeight()
+
+      const pastBottom = currentScrollY + scrollerPhysicalHeight > scrollerHeight
+
+      return pastTop || pastBottom
+    },
+
     _handleScroll () {
       raf(this.update)
     },
@@ -128,14 +183,16 @@ export default {
     update () {
       this.currentScrollY = this._getScrollY()
 
-      const action = checkActions(this)
+      if (!this._isOutOfBound(this.currentScrollY)) {
+        const action = checkActions(this)
 
-      if (action === 'pin') {
-        this.pin()
-      } else if (action === 'unpin') {
-        this.unpin()
-      } else if (action === 'unfix') {
-        this.unfix()
+        if (action === 'pin') {
+          this.pin()
+        } else if (action === 'unpin') {
+          this.unpin()
+        } else if (action === 'unfix') {
+          this.unfix()
+        }
       }
 
       this.lastScrollY = this.currentScrollY
