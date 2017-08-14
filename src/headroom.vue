@@ -1,5 +1,5 @@
 <template>
-  <div class="headroom" :style="style">
+  <div :class="cls" :style="style">
     <slot></slot>
   </div>
 </template>
@@ -9,11 +9,27 @@ import raf from 'raf'
 import checkActions from './checkActions'
 import support3d from './support3d'
 
+const defaultCls = {
+  pinned: 'headroom--pinned',
+  unpinned: 'headroom--unpinned',
+  top: 'headroom--top',
+  notTop: 'headroom--not-top',
+  bottom: 'headroom--bottom',
+  notBottom: 'headroom--not-bottom',
+  initial: 'headroom'
+}
+
 export default {
   name: 'vueHeadroom',
 
   data () {
     return {
+      isTop: false,
+      isNotTop: false,
+      isBottom: false,
+      isNotBottom: false,
+      isPinned: false,
+      isUnpinned: false,
       currentScrollY: 0,
       lastScrollY: 0,
       state: '',
@@ -68,6 +84,13 @@ export default {
     offset: {
       type: Number,
       default: 0
+    },
+
+    classes: {
+      type: Object,
+      default () {
+        return defaultCls
+      }
     }
   },
 
@@ -107,6 +130,28 @@ export default {
       }
     },
 
+    clsOpts () {
+      return {
+        ...defaultCls,
+        ...this.classes
+      }
+    },
+
+    cls () {
+      let cls = this.clsOpts
+      return this.disabled
+        ? {}
+        : {
+          [cls.top]: this.isTop,
+          [cls.notTop]: this.isNotTop,
+          [cls.bottom]: this.isBottom,
+          [cls.notBottom]: this.isNotBottom,
+          [cls.pinned]: this.isPinned,
+          [cls.unpinned]: this.isUnpinned,
+          [cls.initial]: true
+        }
+    },
+
     isInTop () {
       return this.state === 'pinned' || this.state === 'unpinned'
     }
@@ -114,7 +159,7 @@ export default {
 
   methods: {
     _getViewportHeight: () => {
-      window.innerHeight
+      return window.innerHeight
         || document.documentElement.clientHeight
         || document.body.clientHeight
     },
@@ -179,7 +224,11 @@ export default {
       } else if (this.scroller().scrollTop !== undefined) {
         top = this.scroller().scrollTop
       } else {
-        top = (document.documentElement || document.body.parentNode || document.body).scrollTop
+        top = (
+          document.documentElement ||
+          document.body.parentNode ||
+          document.body
+        ).scrollTop
       }
       return top
     },
@@ -196,7 +245,6 @@ export default {
       } else {
         this.notTop()
       }
-
 
       if (this.currentScrollY +
         this._getViewportHeight() >= this._getScrollerHeight()) {
@@ -217,51 +265,61 @@ export default {
     },
 
     top () {
-      if (this.onTop) {
-        this.onTop()
+      if (!this.isTop) {
+        this.isTop = true
+        this.isNotTop = false
+        this.onTop && this.onTop()
       }
     },
 
     notTop () {
-      if (this.onNotTop) {
-        this.onNotTop()
+      if (!this.isNotTop) {
+        this.isTop = false
+        this.isNotTop = true
+        this.onNotTop && this.onNotTop()
       }
     },
 
     bottom () {
-      if (this.onBottom) {
-        this.onBottom()
+      if (!this.isBottom) {
+        this.isBottom = true
+        this.isNotBottom = false
+        this.onBottom && this.onBottom()
       }
     },
 
     notBottom () {
-      if (this.onNotBottom) {
-        this.onNotBottom()
+      if (!this.isNotBottom) {
+        this.isNotBottom = true
+        this.isBottom = false
+        this.onNotBottom && this.onNotBottom()
       }
     },
 
     pin () {
-      this.$emit('pin')
-
-      if (this.onPin) {
-        this.onPin()
+      if (!this.isPinned) {
+        this.isPinned = true
+        this.isUnpinned = false
+        this.onPin && this.onPin()
+        this.$emit('pin')
+        this.translate = 0
+        setTimeout(() => {
+          this.state = 'pinned'
+        }, 0)
       }
-      this.translate = 0
-      setTimeout(() => {
-        this.state = 'pinned'
-      }, 0)
     },
 
     unpin () {
-      this.$emit('unpin')
-
-      if (this.onUnpin) {
-        this.onUnpin()
+      if (this.isPinned || !this.isUnpinned) {
+        this.isUnpinned = true
+        this.isPinned = false
+        this.onUnpin && this.onUnpin()
+        this.$emit('unpin')
+        this.translate = '-100%'
+        setTimeout(() => {
+          this.state = 'unpinned'
+        }, 0)
       }
-      this.translate = '-100%'
-      setTimeout(() => {
-        this.state = 'unpinned'
-      }, 0)
     }
   }
 
