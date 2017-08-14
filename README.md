@@ -72,7 +72,23 @@ Callback when header is pinned.
 
 Callback when header is unpinned.
 
-`pinStart`
+`onTop`
+
+Callback when above offset.
+
+`onNotTop`
+
+Callback when below offset.
+
+`onBottom`
+
+Callback when at bottom of page.
+
+`onNotBottom`
+
+Callback when moving away from bottom of page.
+
+`offset`
 
 Height in px where the header should start and stop pinning. Default: `0`
 

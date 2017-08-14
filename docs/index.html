@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="./style.css">
     <script src="https://unpkg.com/vue@2.4.2"></script>
     <script src="https://unpkg.com/markdown-it@8.3.2/dist/markdown-it.min.js"></script>
-    <script src="https://unpkg.com/vue-headroom@0.5.0/dist/vue-headroom.min.js"></script>
+    <script src="../dist/vue-headroom.min.js"></script>
   </head>
   <body>
     <div class="page-container">
@@ -64,7 +64,23 @@ Callback when header is pinned.
 
 Callback when header is unpinned.
 
-`pinStart`
+`onTop`
+
+Callback when above offset.
+
+`onNotTop`
+
+Callback when below offset.
+
+`onBottom`
+
+Callback when at bottom of page.
+
+`onNotBottom`
+
+Callback when moving away from bottom of page.
+
+`offset`
 
 Height in px where the header should start and stop pinning. Default: `0`
 
