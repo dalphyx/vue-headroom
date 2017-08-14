@@ -97,7 +97,6 @@ export default {
   watch: {
     disabled (newVal) {
       if (newVal) {
-        this.unfix()
         this.scroller().removeEventListener('scroll', this._handleScroll)
       } else {
         this.scroller().addEventListener('scroll', this._handleScroll)
