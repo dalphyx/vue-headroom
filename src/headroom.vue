@@ -60,8 +60,12 @@ export default {
 
     onPin: Function,
     onUnpin: Function,
+    onTop: Function,
+    onNotTop: Function,
+    onBottom: Function,
+    onNotBottom: Function,
 
-    pinStart: {
+    offset: {
       type: Number,
       default: 0
     }
@@ -183,19 +187,59 @@ export default {
     update () {
       this.currentScrollY = this._getScrollY()
 
-      if (!this._isOutOfBound(this.currentScrollY)) {
-        const action = checkActions(this)
+      if (this._isOutOfBound(this.currentScrollY)) {
+        return
+      }
 
-        if (action === 'pin') {
-          this.pin()
-        } else if (action === 'unpin') {
-          this.unpin()
-        } else if (action === 'unfix') {
-          this.unfix()
-        }
+      if (this.currentScrollY <= this.offset) {
+        this.top()
+      } else {
+        this.notTop()
+      }
+
+
+      if (this.currentScrollY +
+        this._getViewportHeight() >= this._getScrollerHeight()) {
+        this.bottom()
+      } else {
+        this.notBottom()
+      }
+
+      const action = checkActions(this)
+
+      if (action === 'pin') {
+        this.pin()
+      } else if (action === 'unpin') {
+        this.unpin()
+      } else if (action === 'unfix') {
+        this.unfix()
       }
 
       this.lastScrollY = this.currentScrollY
+    },
+
+    top () {
+      if (this.onTop) {
+        this.onTop()
+      }
+    },
+
+    notTop () {
+      if (this.onNotTop) {
+        this.onNotTop()
+      }
+    },
+
+    bottom () {
+      if (this.onBottom) {
+        this.onBottom()
+      }
+    },
+
+    notBottom () {
+      if (this.onNotBottom) {
+        this.onNotBottom()
+      }
     },
 
     pin () {

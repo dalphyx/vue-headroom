@@ -7,7 +7,7 @@ function checkActions (states) {
 
   // Begining, at the top and not fixed.
   if (
-    states.currentScrollY <= states.pinStart &&
+    states.currentScrollY <= states.offset &&
     states.state !== 'unfixed'
   ) {
     action = 'unfix'
@@ -25,7 +25,7 @@ function checkActions (states) {
   } else if (
     direction === 'down' &&
     ['pinned', 'unfixed'].indexOf(states.state) >= 0 &&
-    states.currentScrollY > (elemHeight + states.pinStart) &&
+    states.currentScrollY > (elemHeight + states.offset) &&
     distanceScrolled > states.downTolerance
   ) {
     action = 'unpin'
