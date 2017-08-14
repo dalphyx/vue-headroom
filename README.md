@@ -64,6 +64,32 @@ Scroll tolerance when scrolling up before component is pinned, in px. Default: `
 
 Height of progress bar. Default: `3`
 
+`scroller`
+
+Element to listen to scroll events on. Default: () => `window`
+
+`classes`
+
+Css classes to apply. Default:
+```html
+{
+  // when element is initialised
+  initial : "headroom",
+  // when scrolling up
+  pinned : "headroom--pinned",
+  // when scrolling down
+  unpinned : "headroom--unpinned",
+  // when above offset
+  top : "headroom--top",
+  // when below offset
+  notTop : "headroom--not-top",
+  // when at bottom of scoll area
+  bottom : "headroom--bottom",
+  // when not at bottom of scroll area
+  notBottom : "headroom--not-bottom"
+}
+```
+
 `onPin`
 
 Callback when header is pinned.
