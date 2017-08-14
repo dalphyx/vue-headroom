@@ -23,6 +23,11 @@ export default {
   },
 
   props: {
+    scroller: {
+      type: Function,
+      default: () => window
+    },
+
     disabled: {
       type: Boolean,
       default: false
@@ -66,21 +71,21 @@ export default {
     disabled (newVal) {
       if (newVal) {
         this.unfix()
-        window.removeEventListener('scroll', this._handleScroll)
+        this.scroller().removeEventListener('scroll', this._handleScroll)
       } else {
-        window.addEventListener('scroll', this._handleScroll)
+        this.scroller().addEventListener('scroll', this._handleScroll)
       }
     }
   },
 
   mounted () {
     if (!this.disabled) {
-      window.addEventListener('scroll', this._handleScroll)
+      this.scroller().addEventListener('scroll', this._handleScroll)
     }
   },
 
   beforeDestroy () {
-    window.removeEventListener('scroll', this._handleScroll)
+    this.scroller().removeEventListener('scroll', this._handleScroll)
   },
 
   computed: {
@@ -110,10 +115,10 @@ export default {
 
     _getScrollY () {
       let top
-      if (window.pageYOffset !== undefined) {
-        top = window.pageYOffset
-      } else if (window.scrollTop !== undefined) {
-        top = window.scrollTop
+      if (this.scroller().pageYOffset !== undefined) {
+        top = this.scroller().pageYOffset
+      } else if (this.scroller().scrollTop !== undefined) {
+        top = this.scroller().scrollTop
       } else {
         top = (document.documentElement || document.body.parentNode || document.body).scrollTop
       }
