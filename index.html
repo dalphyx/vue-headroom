@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="./style.css">
     <script src="https://unpkg.com/vue@2.4.2"></script>
     <script src="https://unpkg.com/markdown-it@8.3.2/dist/markdown-it.min.js"></script>
-    <script src="https://unpkg.com/vue-headroom@0.5.0/dist/vue-headroom.min.js"></script>
+    <script src="../dist/vue-headroom.min.js"></script>
   </head>
   <body>
     <div class="page-container">
@@ -56,6 +56,32 @@ Scroll tolerance when scrolling up before component is pinned, in px. Default: `
 
 Height of progress bar. Default: `3`
 
+`scroller`
+
+Element to listen to scroll events on. Default: () => `window`
+
+`classes`
+
+Css classes to apply. Default:
+```html
+{
+  // when element is initialised
+  initial : "headroom",
+  // when scrolling up
+  pinned : "headroom--pinned",
+  // when scrolling down
+  unpinned : "headroom--unpinned",
+  // when above offset
+  top : "headroom--top",
+  // when below offset
+  notTop : "headroom--not-top",
+  // when at bottom of scoll area
+  bottom : "headroom--bottom",
+  // when not at bottom of scroll area
+  notBottom : "headroom--not-bottom"
+}
+```
+
 `onPin`
 
 Callback when header is pinned.
@@ -64,7 +90,23 @@ Callback when header is pinned.
 
 Callback when header is unpinned.
 
-`pinStart`
+`onTop`
+
+Callback when above offset.
+
+`onNotTop`
+
+Callback when below offset.
+
+`onBottom`
+
+Callback when at bottom of page.
+
+`onNotBottom`
+
+Callback when moving away from bottom of page.
+
+`offset`
 
 Height in px where the header should start and stop pinning. Default: `0`
 
