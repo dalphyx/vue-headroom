@@ -1,6 +1,7 @@
 function checkActions (states) {
   const direction = states.currentScrollY >= states.lastScrollY ? 'down' : 'up'
   const distanceScrolled = Math.abs(states.currentScrollY - states.lastScrollY)
+  const elemHeight = states.$el.offsetHeight
 
   var action
 
@@ -13,7 +14,7 @@ function checkActions (states) {
 
   // Still unfixed, scrolling down and passing the header.
   } else if (
-    states.currentScrollY <= states.elemHeight &&
+    states.currentScrollY <= elemHeight &&
     direction === 'down' &&
     states.state === 'unfixed'
   ) {
@@ -24,7 +25,7 @@ function checkActions (states) {
   } else if (
     direction === 'down' &&
     ['pinned', 'unfixed'].indexOf(states.state) >= 0 &&
-    states.currentScrollY > (states.elemHeight + states.pinStart) &&
+    states.currentScrollY > (elemHeight + states.pinStart) &&
     distanceScrolled > states.downTolerance
   ) {
     action = 'unpin'
@@ -42,7 +43,7 @@ function checkActions (states) {
   // Pin the header regardless of upTolerance.
   } else if (
     direction === 'up' &&
-    states.currentScrollY <= states.elemHeight &&
+    states.currentScrollY <= elemHeight &&
     ['pinned', 'unfixed'].indexOf(states.state) < 0
   ) {
     action = 'pin'

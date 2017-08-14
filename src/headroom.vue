@@ -1,8 +1,6 @@
 <template>
-  <div class="headroom-wrapper" :style="wrapperStyles">
-    <div class="headroom" :style="innerStyle">
-      <slot></slot>
-    </div>
+  <div class="headroom" :style="style">
+    <slot></slot>
   </div>
 </template>
 
@@ -18,7 +16,6 @@ export default {
     return {
       currentScrollY: 0,
       lastScrollY: 0,
-      elemHeight: 0,
       state: '',
       translate: 0,
       isSupport3d: support3d()
@@ -77,7 +74,6 @@ export default {
   },
 
   mounted () {
-    this.elemHeight = this.$el.offsetHeight
     if (!this.disabled) {
       window.addEventListener('scroll', this._handleScroll)
     }
@@ -88,7 +84,7 @@ export default {
   },
 
   computed: {
-    innerStyle () {
+    style () {
       return {
         'position': this.isInTop ? 'fixed' : 'relative',
         'top': '0',
@@ -99,12 +95,6 @@ export default {
           ? `translate3d(0, ${this.translate}, 0)`
           : `translateY(${this.translate})`,
         'transition': this.isInTop ? `all ${this.speed}ms ${this.easing}` : null
-      }
-    },
-
-    wrapperStyles () {
-      return {
-        height: this.elemHeight ? `${this.elemHeight}px` : null
       }
     },
 
