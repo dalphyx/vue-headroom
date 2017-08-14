@@ -243,7 +243,7 @@ export default {
     },
 
     pin () {
-      this.$emit('fix')
+      this.$emit('pin')
 
       if (this.onPin) {
         this.onPin()
@@ -255,7 +255,7 @@ export default {
     },
 
     unpin () {
-      this.$emit('fix')
+      this.$emit('unpin')
 
       if (this.onUnpin) {
         this.onUnpin()
