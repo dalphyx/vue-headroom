@@ -211,8 +211,6 @@ export default {
         this.pin()
       } else if (action === 'unpin') {
         this.unpin()
-      } else if (action === 'unfix') {
-        this.unfix()
       }
 
       this.lastScrollY = this.currentScrollY
@@ -264,12 +262,6 @@ export default {
       setTimeout(() => {
         this.state = 'unpinned'
       }, 0)
-    },
-
-    unfix () {
-      this.$emit('unfix')
-      this.translate = 0
-      this.state = 'unfixed'
     }
   }
 
