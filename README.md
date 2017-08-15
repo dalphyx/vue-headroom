@@ -62,7 +62,7 @@ Scroll tolerance when scrolling up before component is pinned, in px. Default: `
 
 `downTolerance`
 
-Height of progress bar. Default: `3`
+Scroll tolerance when scrolling down before component is pinned, in px. Default: `0`
 
 `scroller`
 
