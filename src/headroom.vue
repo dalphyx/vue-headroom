@@ -108,6 +108,9 @@ export default {
     if (!this.disabled) {
       this.scroller().addEventListener('scroll', this._handleScroll)
     }
+
+    // When headroom is mounted, call handleScroll to set initial state.
+    this._handleScroll()
   },
 
   beforeDestroy () {
