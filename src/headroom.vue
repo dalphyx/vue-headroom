@@ -33,7 +33,8 @@ export default {
       currentScrollY: 0,
       lastScrollY: 0,
       state: '',
-      translate: 0
+      translate: 0,
+      isSupport3d: false
     }
   },
 
@@ -104,7 +105,8 @@ export default {
   },
 
   mounted () {
-    this.isSupport3d = support3d();
+    this.isSupport3d = support3d()
+
     if (!this.disabled) {
       this.scroller().addEventListener('scroll', this._handleScroll)
     }
