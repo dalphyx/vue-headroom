@@ -1,12 +1,15 @@
 {
   "name": "vue-headroom",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Headroom component for Vuejs",
-  "main": "./dist/vue-headroom.min.js",
+  "main": "./dist/vue-headroom.common.js",
+  "browser": "./dist/vue-headroom.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src/*.js",
-    "build": "node build.js",
+    "postbuild": "npm run compress",
+    "compress": "uglifyjs ./dist/vue-headroom.js -o ./dist/vue-headroom.min.js -c -m --comments /^!/",
+    "build": "rollup -c",
     "gh-pages": "gh-pages -d docs -m 'Deployed to Github Pages'"
   },
   "repository": {
@@ -33,8 +36,8 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
     "rollup-plugin-vue": "^2.5.2",
+    "uglify-js": "^3.2.0",
     "vue-template-compiler": "^2.5.9"
   }
 }
