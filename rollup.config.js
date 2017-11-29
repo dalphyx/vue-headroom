@@ -3,10 +3,27 @@ const babel = require('rollup-plugin-babel')
 const vue = require('rollup-plugin-vue')
 const commonjs = require('rollup-plugin-commonjs')
 const nodeResolve = require('rollup-plugin-node-resolve')
-const uglify = require('rollup-plugin-uglify')
+const pkg = require('./package.json')
 
-rollup.rollup({
+const now = new Date()
+
+export default {
+  name: 'vueHeadroom',
   input: 'src/index.js',
+  output: [
+    {
+      file: 'dist/vue-headroom.js',
+      format: 'umd',
+    },
+    {
+      file: 'dist/vue-headroom.common.js',
+      format: 'cjs',
+    },
+    {
+      file: 'docs/vue-headroom.js',
+      format: 'umd',
+    }
+  ],
   plugins: [
     nodeResolve({
       jsnext: true,
@@ -28,16 +45,16 @@ rollup.rollup({
         ],
         'stage-2'
       ]
-    }),
-    uglify()
-  ]
-}).then(bundle => {
-  bundle.write({
-    format: 'umd',
-    name: 'vueHeadroom',
-    globals: {
-      raf: 'raf'
-    },
-    file: './dist/vue-headroom.min.js'
-  })
-})
+    })
+  ],
+  banner: `/*!
+* vue-headroom v${pkg.version}
+* ${pkg.repository.url}
+*
+* Copyright (c) ${now.getFullYear()} dalphyx
+* Released under the ${pkg.license} license
+*
+* Date: ${now.toISOString()}
+*/
+  `
+}
