@@ -6,7 +6,7 @@ const nodeResolve = require('rollup-plugin-node-resolve')
 const uglify = require('rollup-plugin-uglify')
 
 rollup.rollup({
-  entry: 'src/index.js',
+  input: 'src/index.js',
   plugins: [
     nodeResolve({
       jsnext: true,
@@ -34,10 +34,10 @@ rollup.rollup({
 }).then(bundle => {
   bundle.write({
     format: 'umd',
-    moduleName: 'vueHeadroom',
+    name: 'vueHeadroom',
     globals: {
       raf: 'raf'
     },
-    dest: './dist/vue-headroom.min.js'
+    file: './dist/vue-headroom.min.js'
   })
 })

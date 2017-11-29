@@ -34,6 +34,7 @@
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
-    "rollup-plugin-vue": "^2.5.2"
+    "rollup-plugin-vue": "^2.5.2",
+    "vue-template-compiler": "^2.5.9"
   }
 }
