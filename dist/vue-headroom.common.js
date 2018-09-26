@@ -1,11 +1,11 @@
 /*!
-* vue-headroom v0.8.1
+* vue-headroom v0.8.2
 * git+https://github.com/dalphyx/vue-headroom.git
 *
 * Copyright (c) 2018 dalphyx
 * Released under the MIT license
 *
-* Date: 2018-09-26T22:24:32.126Z
+* Date: 2018-09-26T22:30:22.539Z
 */
   
 'use strict';
