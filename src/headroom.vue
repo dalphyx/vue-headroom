@@ -92,6 +92,11 @@ export default {
         return defaultCls
       }
     }
+
+    footroom: {
+      type: Boolean,
+      default: false
+    }
   },
 
   watch: {
@@ -127,6 +132,10 @@ export default {
         'left': '0',
         'right': '0',
         'z-index': this.isInTop ? this.zIndex : 1
+      }
+
+      if (this.footroom) {
+        styles = { ...styles, 'top': 'unset', 'bottom': '0' }
       }
 
       // SSR cannot detect scroll position. To prevent flash when component mounted,
@@ -327,7 +336,7 @@ export default {
         this.isPinned = false
         this.onUnpin && this.onUnpin()
         this.$emit('unpin')
-        this.translate = '-100%'
+        this.translate = this.footroom ? '100%' : '-100%'
         setTimeout(() => {
           this.state = 'unpinned'
         }, 0)

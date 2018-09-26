@@ -122,6 +122,10 @@ Height in px where the header should start and stop pinning. Default: `0`
 
 The z-index of component. Default: `9999`
 
+`footroom`
+
+Same behaviour but as a footer instead. Default: `false`
+
 # License
 
 [The MIT License](http://opensource.org/licenses/MIT)
