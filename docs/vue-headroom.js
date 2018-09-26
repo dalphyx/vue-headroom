@@ -1,11 +1,11 @@
 /*!
-* vue-headroom v0.8.0
+* vue-headroom v0.8.1
 * git+https://github.com/dalphyx/vue-headroom.git
 *
-* Copyright (c) 2017 dalphyx
+* Copyright (c) 2018 dalphyx
 * Released under the MIT license
 *
-* Date: 2017-11-29T08:28:59.673Z
+* Date: 2018-09-26T22:24:32.126Z
 */
   
 (function (global, factory) {
@@ -281,6 +281,11 @@ var headroom = { render: function render() {
       default: function _default() {
         return defaultCls;
       }
+    },
+
+    footroom: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -317,10 +322,15 @@ var headroom = { render: function render() {
         'left': '0',
         'right': '0',
         'z-index': this.isInTop ? this.zIndex : 1
+      };
 
-        // SSR cannot detect scroll position. To prevent flash when component mounted,
-        // just add transition styles in browser.
-      };if (!this.$isServer) {
+      if (this.footroom) {
+        styles = _extends({}, styles, { 'top': 'unset', 'bottom': '0' });
+      }
+
+      // SSR cannot detect scroll position. To prevent flash when component mounted,
+      // just add transition styles in browser.
+      if (!this.$isServer) {
         styles.transform = this.isSupport3d && !this.$isServer ? 'translate3d(0, ' + this.translate + ', 0)' : 'translateY(' + this.translate + ')';
 
         styles.transition = this.isInTop ? 'all ' + this.speed + 'ms ' + this.easing : null;
@@ -475,7 +485,7 @@ var headroom = { render: function render() {
         this.isPinned = false;
         this.onUnpin && this.onUnpin();
         this.$emit('unpin');
-        this.translate = '-100%';
+        this.translate = this.footroom ? '100%' : '-100%';
         setTimeout(function () {
           _this2.state = 'unpinned';
         }, 0);

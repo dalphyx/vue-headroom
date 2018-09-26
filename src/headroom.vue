@@ -91,7 +91,7 @@ export default {
       default () {
         return defaultCls
       }
-    }
+    },
 
     footroom: {
       type: Boolean,
