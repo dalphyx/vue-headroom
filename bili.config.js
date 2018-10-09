@@ -1,5 +1,5 @@
 const babel = require('rollup-plugin-babel')
-const vue = require('rollup-plugin-vue').default
+const vue = require('rollup-plugin-vue')
 
 module.exports = {
   name: 'vue-headroom',

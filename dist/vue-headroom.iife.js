@@ -3,11 +3,8 @@
  * (c) 2016-present dalphyx <wjcbmk@gmail.com>
  * Released under the MIT License.
  */
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.vueHeadroom = factory());
-}(this, (function () { 'use strict';
+var vueHeadroom = (function () {
+	'use strict';
 
 	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -497,4 +494,4 @@
 
 	return index;
 
-})));
+}());
