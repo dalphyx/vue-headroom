@@ -1,6 +1,8 @@
 <template>
-  <div :class="cls" :style="style">
-    <slot></slot>
+  <div :style="{ height: height + 'px' }">
+    <div :class="cls" :style="style">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -12,6 +14,7 @@ import support3d from './support3d'
 const defaultCls = {
   pinned: 'headroom--pinned',
   unpinned: 'headroom--unpinned',
+  unfixed: 'headroom--unfixed',
   top: 'headroom--top',
   notTop: 'headroom--not-top',
   bottom: 'headroom--bottom',
@@ -31,9 +34,11 @@ export default {
       isPinned: false,
       isUnpinned: false,
       currentScrollY: 0,
-      lastScrollY: 0,
-      state: '',
+      lastScrollY: undefined,
+      state: 'unfixed',
       translate: 0,
+      height: '',
+      animation: true,
       isSupport3d: false
     }
   },
@@ -74,13 +79,6 @@ export default {
       default: 9999
     },
 
-    onPin: Function,
-    onUnpin: Function,
-    onTop: Function,
-    onNotTop: Function,
-    onBottom: Function,
-    onNotBottom: Function,
-
     offset: {
       type: Number,
       default: 0
@@ -111,6 +109,7 @@ export default {
 
   mounted () {
     this.isSupport3d = support3d()
+    this._setHeightOffset()
 
     if (!this.disabled) {
       this.scroller().addEventListener('scroll', this._handleScroll)
@@ -120,6 +119,12 @@ export default {
     this._handleScroll()
   },
 
+  updated () {
+    this.$nextTick(function () {
+      this._setHeightOffset()
+    })
+  },
+
   beforeDestroy () {
     this.scroller().removeEventListener('scroll', this._handleScroll)
   },
@@ -127,11 +132,13 @@ export default {
   computed: {
     style () {
       let styles = {
-        'position': this.isInTop ? 'fixed' : 'relative',
+        'position': this.disabled || this.state === 'unfixed'
+          ? 'relative'
+          : 'fixed',
         'top': '0',
         'left': '0',
         'right': '0',
-        'z-index': this.isInTop ? this.zIndex : 1
+        'z-index': this.zIndex
       }
 
       if (this.footroom) {
@@ -145,7 +152,9 @@ export default {
           ? `translate3d(0, ${this.translate}, 0)`
           : `translateY(${this.translate})`
 
-        styles.transition = this.isInTop ? `all ${this.speed}ms ${this.easing}` : null
+        if (this.animation) {
+          styles.transition = `all ${this.speed}ms ${this.easing}`
+        }
       }
 
       return styles
@@ -171,10 +180,6 @@ export default {
           [cls.unpinned]: this.isUnpinned,
           [cls.initial]: true
         }
-    },
-
-    isInTop () {
-      return this.state === 'pinned' || this.state === 'unpinned'
     }
   },
 
@@ -238,6 +243,12 @@ export default {
       raf(this.update)
     },
 
+    _setHeightOffset () {
+      this.height = this.$slots.default
+        ? this.$slots.default[0].elm && this.$slots.default[0].elm.offsetHeight
+        : ''
+    },
+
     _getScrollY () {
       let top
       if (this.scroller().pageYOffset !== undefined) {
@@ -278,71 +289,82 @@ export default {
 
       if (action === 'pin') {
         this.pin()
+      } else if (action === 'unpin-snap') {
+        this.unpinSnap()
       } else if (action === 'unpin') {
         this.unpin()
+      } else if (action === 'unfix') {
+        this.unfix()
       }
 
       this.lastScrollY = this.currentScrollY
     },
 
     top () {
-      if (!this.isTop) {
-        this.isTop = true
-        this.isNotTop = false
-        this.onTop && this.onTop()
-      }
+      this.isTop = true
+      this.isNotTop = false
+      this.$emit('top')
     },
 
     notTop () {
-      if (!this.isNotTop) {
-        this.isTop = false
-        this.isNotTop = true
-        this.onNotTop && this.onNotTop()
-      }
+      this.isTop = false
+      this.isNotTop = true
+      this.$emit('not-top')
     },
 
     bottom () {
-      if (!this.isBottom) {
-        this.isBottom = true
-        this.isNotBottom = false
-        this.onBottom && this.onBottom()
-      }
+      this.isBottom = true
+      this.isNotBottom = false
+      this.$emit('bottom')
     },
 
     notBottom () {
-      if (!this.isNotBottom) {
-        this.isNotBottom = true
-        this.isBottom = false
-        this.onNotBottom && this.onNotBottom()
-      }
+      this.isNotBottom = true
+      this.isBottom = false
+      this.$emit('not-bottom')
     },
 
     pin () {
-      if (!this.isPinned) {
-        this.isPinned = true
-        this.isUnpinned = false
-        this.onPin && this.onPin()
-        this.$emit('pin')
-        this.translate = 0
-        setTimeout(() => {
-          this.state = 'pinned'
-        }, 0)
-      }
+      this.isPinned = true
+      this.isUnpinned = false
+      this.animation = true
+      this.$emit('pin')
+      this.translate = 0
+      this.$nextTick(() => {
+        this.state = 'pinned'
+      })
     },
 
     unpin () {
-      if (this.isPinned || !this.isUnpinned) {
-        this.isUnpinned = true
-        this.isPinned = false
-        this.onUnpin && this.onUnpin()
-        this.$emit('unpin')
-        this.translate = this.footroom ? '100%' : '-100%'
-        setTimeout(() => {
-          this.state = 'unpinned'
-        }, 0)
-      }
+      this.isUnpinned = true
+      this.isPinned = false
+      this.animation = true
+      this.$emit('unpin')
+      this.translate = this.footroom ? '100%' : '-100%'
+      this.$nextTick(() => {
+        this.state = 'unpinned'
+      })
+    },
+
+    unpinSnap () {
+      this.isUnpinned = true
+      this.isPinned = false
+      this.animation = false
+      this.$emit('unpin')
+      this.translate = this.footroom ? '100%' : '-100%'
+      this.$nextTick(() => {
+        this.state = 'unpinned'
+      }) 
+    },
+
+    unfix () {
+      this.translate = 0
+      this.animation = false
+      this.$emit('unfix')
+      this.$nextTick(() => {
+        this.state = 'unfixed'
+      })
     }
   }
-
 }
 </script>
