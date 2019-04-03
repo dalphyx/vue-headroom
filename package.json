@@ -4,9 +4,13 @@
   "description": "Headroom component for Vuejs",
   "main": "./dist/vue-headroom-umd.js",
   "browser": "./dist/vue-headroom-umd.js",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "lint": "eslint ./src/*.js",
-    "build": "rm -rf ./dist && bili",
+    "build": "bili",
     "prepublishOnly": "npm run build",
     "gh-pages": "gh-pages -d docs -m 'Deployed to Github Pages'",
     "release": "standard-version && npm run build && git push --follow-tags && npm publish"
