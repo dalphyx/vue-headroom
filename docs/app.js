@@ -1,6 +1,7 @@
 const md = new window.markdownit()
 
 const props = document.querySelector('#props-content').innerHTML
+const events = document.querySelector('#events-content').innerHTML
 
 new Vue({
   el: '.page-container',
@@ -30,6 +31,7 @@ new Vue({
       </script>
     `),
 
-    props: md.render(props)
+    props: md.render(props),
+    events: md.render(events)
   }
 })
