@@ -2,28 +2,38 @@ const babel = require('rollup-plugin-babel')
 const vue = require('rollup-plugin-vue')
 
 module.exports = {
-  name: 'vue-headroom',
-  moduleName: 'vueHeadroom',
-  input: 'src/index.js',
-  format: ['cjs', 'umd', 'umd-min', 'es', 'iife'],
-  plugins: [
-    vue({
+  input: {
+    'vue-headroom': 'src/index.js'
+  },
+  output: {
+    fileName: '[name]-[format][min].js',
+    moduleName: 'vueHeadroom',
+    format: ['cjs', 'umd', 'umd-min', 'es', 'iife']
+  },
+  plugins: {
+    vue: {
       compileTemplate: true
-    }),
-    babel({
+    },
+    babel: {
       babelrc: false,
       exclude: 'node_modules/**',
       presets: [
         [
-          'es2015',
+          "@babel/preset-env",
           {
-            'modules': false
+            "modules": false,
+            "loose": true,
+            "targets": {
+              "browsers": [
+                "last 2 versions",
+                "ie >= 9"
+              ]
+            }
           }
-        ],
-        'stage-2'
-      ]
-    })
-  ],
+        ]
+      ]      
+    }
+  },
   banner: {
     year: 2016
   }
