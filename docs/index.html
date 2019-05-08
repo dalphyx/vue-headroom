@@ -2,9 +2,9 @@
 <html>
   <head>
     <link rel="stylesheet" href="./style.css">
-    <script src="https://unpkg.com/vue@2.5.9"></script>
+    <script src="https://unpkg.com/vue@2.6.10"></script>
     <script src="https://unpkg.com/markdown-it@8.3.2/dist/markdown-it.min.js"></script>
-    <script src="./vue-headroom.js"></script>
+    <script src="https://unpkg.com/vue-headroom@latest"></script>
   </head>
   <body>
     <div class="page-container">
@@ -32,6 +32,10 @@
           <h1>Props</h1>
 
           <p v-html="props"></p>
+
+          <h1>Events</h1>
+
+          <p v-html="events"></p>
         </div>
       </main>
     </div>
@@ -82,30 +86,6 @@ Css classes to apply. Default:
 }
 ```
 
-`onPin`
-
-Callback when header is pinned.
-
-`onUnpin`
-
-Callback when header is unpinned.
-
-`onTop`
-
-Callback when above offset.
-
-`onNotTop`
-
-Callback when below offset.
-
-`onBottom`
-
-Callback when at bottom of page.
-
-`onNotBottom`
-
-Callback when moving away from bottom of page.
-
 `offset`
 
 Height in px where the header should start and stop pinning. Default: `0`
@@ -113,6 +93,40 @@ Height in px where the header should start and stop pinning. Default: `0`
 `zIndex`
 
 The z-index of component. Default: `9999`
+
+`footroom`
+
+Same behaviour but as a footer instead. Default: `false`
+    </script>
+
+    <script type="text/template" id="events-content">
+`pin`
+
+Callback when header is pinned.
+
+`unpin`
+
+Callback when header is unpinned.
+
+`unfix`
+
+Callback when header is unfixed.
+
+`top`
+
+Callback when above offset.
+
+`not-top`
+
+Callback when below offset.
+
+`bottom`
+
+Callback when at bottom of page.
+
+`not-bottom`
+
+Callback when moving away from bottom of page.
     </script>
     <script src="./app.js"></script>
   </body>

@@ -90,30 +90,6 @@ Css classes to apply. Default:
 }
 ```
 
-`onPin`
-
-Callback when header is pinned.
-
-`onUnpin`
-
-Callback when header is unpinned.
-
-`onTop`
-
-Callback when above offset.
-
-`onNotTop`
-
-Callback when below offset.
-
-`onBottom`
-
-Callback when at bottom of page.
-
-`onNotBottom`
-
-Callback when moving away from bottom of page.
-
 `offset`
 
 Height in px where the header should start and stop pinning. Default: `0`
@@ -121,6 +97,40 @@ Height in px where the header should start and stop pinning. Default: `0`
 `zIndex`
 
 The z-index of component. Default: `9999`
+
+`footroom`
+
+Same behaviour but as a footer instead. Default: `false`
+
+# Events
+
+`pin`
+
+Callback when header is pinned.
+
+`unpin`
+
+Callback when header is unpinned.
+
+`unfix`
+
+Callback when header is unfixed.
+
+`top`
+
+Callback when above offset.
+
+`not-top`
+
+Callback when below offset.
+
+`bottom`
+
+Callback when at bottom of page.
+
+`not-bottom`
+
+Callback when moving away from bottom of page.
 
 # License
 
