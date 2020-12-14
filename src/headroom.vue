@@ -354,7 +354,7 @@ export default {
       this.translate = this.footroom ? '100%' : '-100%'
       this.$nextTick(() => {
         this.state = 'unpinned'
-      }) 
+      })
     },
 
     unfix () {

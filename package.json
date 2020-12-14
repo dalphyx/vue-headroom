@@ -2,16 +2,15 @@
   "name": "vue-headroom",
   "version": "0.10.1",
   "description": "Headroom component for Vuejs",
-  "module": "./dist/vue-headroom-esm.js",
+  "module": "./dist/vue-headroom-es.js",
   "main": "./dist/vue-headroom-umd.js",
-  "browser": "./dist/vue-headroom-umd.js",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
     "lint": "eslint ./src/*.js",
-    "build": "bili",
+    "build": "rollup --config rollup.config.js",
     "prepublishOnly": "npm run build",
     "gh-pages": "gh-pages -d docs -m 'Deployed to Github Pages'",
     "release": "standard-version && npm run build && git push --follow-tags && npm publish"
@@ -30,14 +29,17 @@
   },
   "homepage": "https://github.com/dalphyx/vue-headroom#readme",
   "devDependencies": {
-    "@babel/preset-env": "^7.4.3",
-    "bili": "^4.7.2",
+    "@rollup/plugin-node-resolve": "^11.0.0",
     "eslint": "^5.16.0",
     "eslint-config-dalphyx": "^0.3.0",
     "gh-pages": "^2.0.1",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-vue": "^4.7.2",
+    "rollup": "^2.33.3",
+    "rollup-plugin-vue": "^5.1.9",
     "standard-version": "^5.0.2",
-    "vue-template-compiler": "^2.6.10"
-  }
+    "vue-template-compiler": "^2.6.12"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "ie >= 10"
+  ]
 }
