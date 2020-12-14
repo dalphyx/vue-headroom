@@ -2,6 +2,7 @@
   "name": "vue-headroom",
   "version": "0.10.1",
   "description": "Headroom component for Vuejs",
+  "module": "./dist/vue-headroom-esm.js",
   "main": "./dist/vue-headroom-umd.js",
   "browser": "./dist/vue-headroom-umd.js",
   "files": [
