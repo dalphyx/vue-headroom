@@ -21,9 +21,7 @@
   },
   "author": "dalphyx <wjcbmk@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "raf": "^3.4.1"
-  },
+  "dependencies": {},
   "bugs": {
     "url": "https://github.com/dalphyx/vue-headroom/issues"
   },
