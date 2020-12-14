@@ -100,9 +100,9 @@ export default {
   watch: {
     disabled (newVal) {
       if (newVal) {
-        this.scroller().removeEventListener('scroll', this._handleScroll)
+        this.scroller().removeEventListener('scroll', this._handleScroll, { passive: true })
       } else {
-        this.scroller().addEventListener('scroll', this._handleScroll)
+        this.scroller().addEventListener('scroll', this._handleScroll, { passive: true })
       }
     }
   },
@@ -112,7 +112,7 @@ export default {
     this._setHeightOffset()
 
     if (!this.disabled) {
-      this.scroller().addEventListener('scroll', this._handleScroll)
+      this.scroller().addEventListener('scroll', this._handleScroll, { passive: true })
     }
 
     // When headroom is mounted, call handleScroll to set initial state.
@@ -126,7 +126,7 @@ export default {
   },
 
   beforeDestroy () {
-    this.scroller().removeEventListener('scroll', this._handleScroll)
+    this.scroller().removeEventListener('scroll', this._handleScroll, { passive: true })
   },
 
   computed: {
@@ -354,7 +354,7 @@ export default {
       this.translate = this.footroom ? '100%' : '-100%'
       this.$nextTick(() => {
         this.state = 'unpinned'
-      }) 
+      })
     },
 
     unfix () {
