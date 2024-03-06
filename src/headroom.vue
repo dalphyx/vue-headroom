@@ -69,7 +69,7 @@ export default defineComponent({
     }
   },
 
-  setup(props,{emit,slots}){
+  setup(props,{emit}){
     const isTop = ref(false)
     const isNotTop = ref(false)
     const isBottom = ref(false)
@@ -214,9 +214,6 @@ export default defineComponent({
 
     function _setHeightOffset () {
       height.value = main.value?.offsetHeight ??""
-      // height.value = slots.default
-      //   ? slots.default()[0].elm && slots.default()[0].elm.offsetHeight
-      //   : ''
     }
 
     function _getScrollY () {
