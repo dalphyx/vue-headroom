@@ -4,12 +4,12 @@
 
 # Requirements
 
-- [Vue.js](https://github.com/vuejs/vue) `^2.0.0`
+- [Vue.js](https://github.com/vuejs/vue) `^3.0.0`
 
 # Installation
 
 ``` bash
-$ npm install vue-headroom
+$ yarn add vue-headroom
 ```
 
 # Docs & Demo
@@ -27,9 +27,9 @@ $ npm install vue-headroom
 </template>
 
 <script>
-import headroom from 'vue-headroom'
+import {install} from 'vue-headroom'
 
-Vue.use(headroom)
+app.use(install)
 
 // or
 import { headroom } from 'vue-headroom'
