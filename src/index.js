@@ -1,18 +1,11 @@
 import headroom from './headroom.vue'
 
-const install = function (Vue, opt = {}) {
-  if (install.installed) {
-    return
-  }
-
-  Vue.component(headroom.name, headroom)
-}
-
+const install = (app, options) => {
+  app.component(headroom.name, headroom)
+};
+// If running in the browser and `window.Vue` is available, auto-install
 if (typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue)
+  install(window.Vue);
 }
-
-export default {
-  headroom,
-  install
-}
+// Export the component and the install function
+export { headroom, install };
