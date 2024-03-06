@@ -1,15 +1,15 @@
 <template>
   <div :style="{ height: height + 'px' }">
-    <div :class="cls" :style="style">
-      <slot></slot>
+    <div :class="cls" :style="style" ref="main">
+      <slot>test</slot>
     </div>
   </div>
 </template>
 
 <script>
-import raf from 'raf'
 import checkActions from './checkActions'
 import support3d from './support3d'
+import {computed, defineComponent, nextTick, onBeforeUnmount, onMounted, onUpdated, ref, toRef, watch} from "vue";
 
 const defaultCls = {
   pinned: 'headroom--pinned',
@@ -22,180 +22,149 @@ const defaultCls = {
   initial: 'headroom'
 }
 
-export default {
+export default defineComponent({
   name: 'vueHeadroom',
-
-  data () {
-    return {
-      isTop: false,
-      isNotTop: false,
-      isBottom: false,
-      isNotBottom: false,
-      isPinned: false,
-      isUnpinned: false,
-      currentScrollY: 0,
-      lastScrollY: undefined,
-      state: 'unfixed',
-      translate: 0,
-      height: '',
-      animation: true,
-      isSupport3d: false
-    }
-  },
-
   props: {
     scroller: {
       type: Function,
       default: () => window
     },
-
     disabled: {
       type: Boolean,
       default: false
     },
-
     upTolerance: {
       type: Number,
       default: 5
     },
-
     downTolerance: {
       type: Number,
       default: 0
     },
-
     speed: {
       type: Number,
       default: 250
     },
-
     easing: {
       type: String,
       default: 'ease-in-out'
     },
-
     zIndex: {
       type: Number,
       default: 9999
     },
-
     offset: {
       type: Number,
       default: 0
     },
-
     classes: {
       type: Object,
       default () {
         return defaultCls
       }
     },
-
     footroom: {
       type: Boolean,
       default: false
     }
   },
 
-  watch: {
-    disabled (newVal) {
-      if (newVal) {
-        this.scroller().removeEventListener('scroll', this._handleScroll)
-      } else {
-        this.scroller().addEventListener('scroll', this._handleScroll)
+  setup(props,{emit}){
+    const isTop = ref(false)
+    const isNotTop = ref(false)
+    const isBottom = ref(false)
+    const isNotBottom = ref(false)
+    const isPinned = ref(false)
+    const isUnpinned = ref(false)
+    const currentScrollY = ref(0)
+    const lastScrollY = ref(undefined)
+    const state = ref('unfixed')
+    const translate = ref(0)
+    const height = ref('')
+    const animation = ref(true)
+    const isSupport3d = ref(false)
+    const main = ref(null)
+    onMounted(()=>{
+      isSupport3d.value = support3d()
+      _setHeightOffset()
+
+      if (!props.disabled) {
+        props.scroller().addEventListener('scroll', _handleScroll)
       }
-    }
-  },
 
-  mounted () {
-    this.isSupport3d = support3d()
-    this._setHeightOffset()
-
-    if (!this.disabled) {
-      this.scroller().addEventListener('scroll', this._handleScroll)
-    }
-
-    // When headroom is mounted, call handleScroll to set initial state.
-    this._handleScroll()
-  },
-
-  updated () {
-    this.$nextTick(function () {
-      this._setHeightOffset()
+      // When headroom is mounted, call handleScroll to set initial state.
+      _handleScroll()
     })
-  },
+    onUpdated(()=>{
+      nextTick(function () {
+        _setHeightOffset()
+      })
+    })
 
-  beforeDestroy () {
-    this.scroller().removeEventListener('scroll', this._handleScroll)
-  },
+    onBeforeUnmount(()=>{
+      props.scroller().removeEventListener('scroll', _handleScroll)
+    })
 
-  computed: {
-    style () {
+    const style = computed(()=> {
       let styles = {
-        'position': this.disabled || this.state === 'unfixed'
+        'position': props.disabled || state.value === 'unfixed'
           ? 'relative'
           : 'fixed',
         'top': '0',
         'left': '0',
         'right': '0',
-        'z-index': this.zIndex
+        'z-index': props.zIndex
       }
 
-      if (this.footroom) {
+      if (props.footroom) {
         styles = { ...styles, 'top': 'unset', 'bottom': '0' }
       }
 
       // SSR cannot detect scroll position. To prevent flash when component mounted,
       // just add transition styles in browser.
-      if (!this.$isServer) {
-        styles.transform = this.isSupport3d && !this.$isServer
-          ? `translate3d(0, ${this.translate}, 0)`
-          : `translateY(${this.translate})`
+      const isServer = typeof window === 'undefined';
+      if (!isServer) {
+        styles.transform = isSupport3d.value && !isServer
+          ? `translate3d(0, ${translate.value}, 0)`
+          : `translateY(${translate.value})`
 
-        if (this.animation) {
-          styles.transition = `all ${this.speed}ms ${this.easing}`
+        if (animation.value) {
+          styles.transition = `all ${props.speed}ms ${props.easing}`
         }
       }
 
       return styles
-    },
-
-    clsOpts () {
+    })
+    const clsOpts = computed(()=> {
       return {
         ...defaultCls,
-        ...this.classes
+        ...props.classes
       }
-    },
-
-    cls () {
-      let cls = this.clsOpts
-      return this.disabled
-        ? {}
-        : {
-          [cls.top]: this.isTop,
-          [cls.notTop]: this.isNotTop,
-          [cls.bottom]: this.isBottom,
-          [cls.notBottom]: this.isNotBottom,
-          [cls.pinned]: this.isPinned,
-          [cls.unpinned]: this.isUnpinned,
-          [cls.initial]: true
-        }
-    }
-  },
-
-  methods: {
-    _getViewportHeight: () => {
+    })
+    const cls = computed(()=> {
+        let cls = clsOpts.value
+        return props.disabled
+          ? {}
+          : {
+            [cls.top]: isTop.value,
+            [cls.notTop]: isNotTop.value,
+            [cls.bottom]: isBottom.value,
+            [cls.notBottom]: isNotBottom.value,
+            [cls.pinned]: isPinned.value,
+            [cls.unpinned]: isUnpinned.value,
+            [cls.initial]: true
+          }
+      }
+    )
+    const _getViewportHeight= () => {
       return window.innerHeight
-        || document.documentElement.clientHeight
-        || document.body.clientHeight
-    },
+      || document.documentElement.clientHeight
+      || document.body.clientHeight
+    }
 
-    _getElementPhysicalHeight: elm => Math.max(
-      elm.offsetHeight,
-      elm.clientHeight
-    ),
+    const _getElementPhysicalHeight= elm => Math.max(elm.offsetHeight,elm.clientHeight)
 
-    _getDocumentHeight: () => {
+    const _getDocumentHeight= () => {
       const body = document.body
       const documentElement = document.documentElement
 
@@ -204,57 +173,55 @@ export default {
         body.offsetHeight, documentElement.offsetHeight,
         body.clientHeight, documentElement.clientHeight
       )
-    },
+    }
 
-    _getElementHeight: elm => Math.max(
+    const _getElementHeight = elm => Math.max(
       elm.scrollHeight,
       elm.offsetHeight,
       elm.clientHeight
-    ),
+    )
 
-    _getScrollerPhysicalHeight () {
-      const parent = this.scroller()
-
-      return (parent === window || parent === document.body)
-        ? this._getViewportHeight()
-        : this._getElementPhysicalHeight(parent)
-    },
-
-    _getScrollerHeight () {
-      const parent = this.scroller()
+    function _getScrollerPhysicalHeight () {
+      const parent = props.scroller()
 
       return (parent === window || parent === document.body)
-        ? this._getDocumentHeight()
-        : this._getElementHeight(parent)
-    },
+        ? _getViewportHeight()
+        : _getElementPhysicalHeight(parent)
+    }
 
-    _isOutOfBound (currentScrollY) {
+    function _getScrollerHeight () {
+      const parent = props.scroller()
+
+      return (parent === window || parent === document.body)
+        ? _getDocumentHeight()
+        : _getElementHeight(parent)
+    }
+
+    function _isOutOfBound (currentScrollY) {
       const pastTop = currentScrollY < 0
 
-      const scrollerPhysicalHeight = this._getScrollerPhysicalHeight()
-      const scrollerHeight = this._getScrollerHeight()
+      const scrollerPhysicalHeight = _getScrollerPhysicalHeight()
+      const scrollerHeight = _getScrollerHeight()
 
       const pastBottom = currentScrollY + scrollerPhysicalHeight > scrollerHeight
 
       return pastTop || pastBottom
-    },
+    }
 
-    _handleScroll () {
-      raf(this.update)
-    },
+    function _handleScroll () {
+      window.requestAnimationFrame(update)
+    }
 
-    _setHeightOffset () {
-      this.height = this.$slots.default
-        ? this.$slots.default[0].elm && this.$slots.default[0].elm.offsetHeight
-        : ''
-    },
+    function _setHeightOffset () {
+      height.value = main.value?.offsetHeight ??""
+    }
 
-    _getScrollY () {
+    function _getScrollY () {
       let top
-      if (this.scroller().pageYOffset !== undefined) {
-        top = this.scroller().pageYOffset
-      } else if (this.scroller().scrollTop !== undefined) {
-        top = this.scroller().scrollTop
+      if (props.scroller().pageYOffset !== undefined) {
+        top = props.scroller().pageYOffset
+      } else if (props.scroller().scrollTop !== undefined) {
+        top = props.scroller().scrollTop
       } else {
         top = (
           document.documentElement ||
@@ -263,108 +230,130 @@ export default {
         ).scrollTop
       }
       return top
-    },
+    }
 
-    update () {
-      this.currentScrollY = this._getScrollY()
+    function update () {
+      currentScrollY.value = _getScrollY()
 
-      if (this._isOutOfBound(this.currentScrollY)) {
+      if (_isOutOfBound(currentScrollY.value)) {
         return
       }
 
-      if (this.currentScrollY <= this.offset) {
-        this.top()
+      if (currentScrollY.value <= props.offset) {
+        top()
       } else {
-        this.notTop()
+        notTop()
       }
 
-      if (this.currentScrollY +
-        this._getViewportHeight() >= this._getScrollerHeight()) {
-        this.bottom()
+      if (currentScrollY.value + _getViewportHeight() >= _getScrollerHeight()) {
+        bottom()
       } else {
-        this.notBottom()
+        notBottom()
       }
 
-      const action = checkActions(this)
+      const action = checkActions({
+        currentScrollY,
+        lastScrollY,
+        height,
+        offset:toRef(props.offset),
+        downTolerance:toRef(props.downTolerance),
+        upTolerance:toRef(props.upTolerance),
+        state
+
+      })
 
       if (action === 'pin') {
-        this.pin()
+        pin()
       } else if (action === 'unpin-snap') {
-        this.unpinSnap()
+        unpinSnap()
       } else if (action === 'unpin') {
-        this.unpin()
+        unpin()
       } else if (action === 'unfix') {
-        this.unfix()
+        unfix()
       }
+      lastScrollY.value = currentScrollY.value
+    }
 
-      this.lastScrollY = this.currentScrollY
-    },
+    function top () {
+      isTop.value = true
+      isNotTop.value = false
+      emit('top')
+    }
 
-    top () {
-      this.isTop = true
-      this.isNotTop = false
-      this.$emit('top')
-    },
+    function notTop () {
+      isTop.value = false
+      isNotTop.value = true
+      emit('not-top')
+    }
 
-    notTop () {
-      this.isTop = false
-      this.isNotTop = true
-      this.$emit('not-top')
-    },
+    function bottom () {
+      isBottom.value = true
+      isNotBottom.value = false
+      emit('bottom')
+    }
 
-    bottom () {
-      this.isBottom = true
-      this.isNotBottom = false
-      this.$emit('bottom')
-    },
+    function notBottom () {
+      isNotBottom.value = true
+      isBottom.value = false
+      emit('not-bottom')
+    }
 
-    notBottom () {
-      this.isNotBottom = true
-      this.isBottom = false
-      this.$emit('not-bottom')
-    },
-
-    pin () {
-      this.isPinned = true
-      this.isUnpinned = false
-      this.animation = true
-      this.$emit('pin')
-      this.translate = 0
-      this.$nextTick(() => {
-        this.state = 'pinned'
-      })
-    },
-
-    unpin () {
-      this.isUnpinned = true
-      this.isPinned = false
-      this.animation = true
-      this.$emit('unpin')
-      this.translate = this.footroom ? '100%' : '-100%'
-      this.$nextTick(() => {
-        this.state = 'unpinned'
-      })
-    },
-
-    unpinSnap () {
-      this.isUnpinned = true
-      this.isPinned = false
-      this.animation = false
-      this.$emit('unpin')
-      this.translate = this.footroom ? '100%' : '-100%'
-      this.$nextTick(() => {
-        this.state = 'unpinned'
-      }) 
-    },
-
-    unfix () {
-      this.translate = 0
-      this.animation = false
-      this.$emit('unfix')
-      this.$nextTick(() => {
-        this.state = 'unfixed'
+    function pin () {
+      isPinned.value = true
+      isUnpinned.value = false
+      animation.value = true
+      emit('pin')
+      translate.value = 0
+      nextTick(() => {
+        state.value = 'pinned'
       })
     }
+
+    function unpin () {
+      isUnpinned.value = true
+      isPinned.value = false
+      animation.value = true
+      emit('unpin')
+      translate.value = props.footroom ? '100%' : '-100%'
+      nextTick(() => {
+        state.value = 'unpinned'
+      })
+    }
+
+    function unpinSnap () {
+      isUnpinned.value = true
+      isPinned.value = false
+      animation.value = false
+      emit('unpin')
+      translate.value = props.footroom ? '100%' : '-100%'
+      nextTick(() => {
+        state.value = 'unpinned'
+      })
+    }
+
+    function unfix () {
+      translate.value = 0
+      animation.value = false
+      emit('unfix')
+      nextTick(() => {
+        state.value = 'unfixed'
+      })
+    }
+    watch(()=>props.disabled, (newVal) =>{
+      if (newVal) {
+        props.scroller().removeEventListener('scroll', _handleScroll)
+      } else {
+        props.scroller().addEventListener('scroll', _handleScroll)
+      }
+    })
+
+    return {
+      main,
+      height,
+      cls,
+      style
+    }
   }
-}
+
+})
 </script>
